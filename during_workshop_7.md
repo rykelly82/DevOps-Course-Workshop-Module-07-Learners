@@ -7,96 +7,151 @@ Select the correct set of instructions for your platform of choice:
 - [GitHub Actions](./github_actions.md)
 - [GitLab CI](./gitlab.md)
 
-## Part 2 (Jenkins)
+## Part 2 (Azure DevOps)
 
-### Step 1 - Run Jenkins locally
-There are two options for running Jenkins locally, you can either install Jenkins or run it through Docker. We would recommend running Jenkins through Docker and the instructions for that are [here](https://www.jenkins.io/doc/book/installing/#docker).
+### Explore Azure DevOps
 
-> If you're on Windows make sure to run the commands in PowerShell rather than Git Bash to avoid issues with path expansion.
+> Remember that Azure DevOps is a product: despite the name, it shouldn't be seen as a silver bullet for "doing DevOps"!
 
-### Step 2 - Set up Jenkins
-Once you've done the step above you should have Jenkins running on <http://localhost:8080/>. If you go to this url in a browser it should show you a setup page.
-1. Login with the password you got from the logs when starting Jenkins. **Hint:** You can run `docker logs your_container` to access a container's logs. Run `docker container ls` to view a list of running containers.
-2. Now you have the option to select some initial plugins. Either select the suggested plugins or if you customise it, make sure you include the "Docker" plugin. We won't need any others right away, and you can add more later.
-3. Create an admin user.
-4. Use the default Jenkins URL (<http://localhost:8080>)
+You should have been provided access to an Azure account at this stage. If you do not have the details for that, please ask a trainer.
 
-You should now see the Jenkins dashboard.
+You can access the Azure Portal generally at <https://portal.azure.com/>, but for now we can skip straight through to the Azure DevOps (ADO) portal at <https://aex.dev.azure.com/>.
 
-### Step 3 - Set up a Jenkins build
-We now want to get Jenkins to build our app. To do this you need to create a job on Jenkins for our app and create a [Jenkinsfile](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/) in your repository to define what the job should do.
+From here, using the Corndel Digital Academy tenant, you should see that you have been granted access to an ADO Organization & a Project within that - click to open your project.
 
-#### Create a Jenkins job
-From your Jenkins dashboard:
-1. Select New Item.
-2. Set it to a multibranch pipeline. This means the job will scan your repository for branches and run the job on any branch with a Jenkinsfile.
-3. Leave all the defaults other than setting the branch sources to GitHub. Leave the defaults for the branch source other than setting the repository url to your repository url. You may notice a warning about not using GitHub credentials at this point. This is fine, as we're just reading from a public repository we don't need credentials. If we were using a private repository or we were writing to the repository during the job, then we would need to set up credentials.
-4. Click Save to create the Jenkins job.
+Azure DevOps does many different things, the key tabs on the left to start with are:
 
-If the initial scan that it runs seems to be slow, see the hint below for how to adjust GitHub rate limiting.
+* **Boards**
+  * Here ADO offers various structures of ticketing-boards, used for tracking work
+  * It can be offer various powerful capabilities, such as managing "sprints", "backlogs" and generating analytics.
+  * If you're interested, [see Microsoft's guidance for more information](https://learn.microsoft.com/bs-latn-ba/azure/devops/boards/?view=azure-devops)
+* **Pipelines**
+  * The core of today's workshop, ADO offers an interface for managing pipeline jobs that can be used for a variety of tasks including Continuous Integration.
+  * Pipelines can be set up using either the "Classic Interface" or a YAML file. We will encourage the use of the latter, to take advantage of codifying our pipelines
+  * TODO: Link some docs
+* **Repos**
+  * ADO can be used as a standalone tool providing just pipelines or boards pointing at work being tracked separately, but is commonly also used to host the code itself in repositories (repos)
+  * TODO: Link some docs
 
-#### Create a Jenkinsfile
-See <https://www.jenkins.io/doc/book/pipeline/jenkinsfile/> for details on how to create a Jenkinsfile. We want to add the same steps as for the GitHub Actions workflow so that it:
+Take a couple of minutes to explore the different views available within your project, and familiarise yourself with the ADO interface.
+
+### Upload a repository
+
+Before we can create our pipelines, we need somewhere for the YAML file to be read from.
+
+We typically want this to be stored directly alongside our codebase, so that we can manage changes between those seamlessly.
+
+Within your breakout room you will have access to the same project, so at this point agree which approach you plan to use:
+* A single repository
+  * Where different people can work on different branches
+* A repository each
+
+If you are creating the first repository, you can click the "Import" button to import the existing GitHub repository.
+
+If someone has already created the first repository and you want to create another, then you can click on the repository list at the top (as per the image below) and click "Import Repository" to create a new one.
+
+![Create repo image](./img/ado-create-repo.png)
+
+### Creating your first ADO pipeline
+
+Now that we have a repository, we can start to create our first pipeline!
+
+First we want to clone the repo:
+* Make sure you've selected the correct repository first
+* Then select the `Clone` button to find the repo URL (just as with GitHub)
+* Clone that onto your machine as usual (e.g. `git clone <url> <folder name>`)
+
+TODO: PERMISSIONS!
+
+Open the repository in VS Code, and add a new file at the top level called `azure-pipelines.yml`.
+
+Into that file, copy the following code:
+```yml
+# Here we specify what causes the pipeline to run; in this case changes to any branch
+trigger:
+- '*'
+
+# Here we specify what type of machine (agent) to run on
+pool:
+  vmImage: 'ubuntu-latest'
+
+# And here we specify a list of "jobs"
+jobs:
+  - job: firstJob
+    displayName: "My first Job"
+    # Each job has a sequence of steps to run
+    steps:
+      - script: echo "Hello World"
+        displayName: Say Hello
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: echo "Hello World (again)"
+```
+
+Note that each step is defined as either a "script" or a "task".
+
+**Scripts** specify a specific command to run, such as our `echo` command, or something more complex (including executing a script file!).
+
+**Tasks** refer to a predefined mdoule, typically built-in & provided by Microsoft. These can be useful for common requirements, such as installing a particular package, or interacting with the Azure platform.
+
+[A list of Microsoft provided tasks can be viewed here.](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/?view=azure-pipelines)
+
+Check you're working on the right branch and then commit & push this file.
+
+Moving to the Pipelines view in ADO, we can now register our pipeline.
+
+TODO: Check how this changes if one person creates & registers on branch A, then second person on branch B
+
+To create your pipeline:
+* Click "Create Pipeline"
+* Select "Azure Repos Git" as your code location.
+* Select your repository
+* It should then locate your pipeline file, and you can click "Run"
+
+After a few seconds, you should see a successful run! Check that it matches your repository & branch name, and then click into your pipeline & job to see the console output.
+
+Can you see where your `echo` statements have printed their messages?
+
+### Extending the pipeline
+
+As before, we want our pipeline to be able to verify that our application is in a working state!
+
+Try extending your pipeline to cover all the scenarios so that it:
 1. Builds the C# code.
-2. Runs the C# tests.
-3. Builds the TypeScript code.
-4. Runs the linter on the TypeScript code.
-5. Runs the TypeScript tests.
+1. Runs the C# tests.
+1. Builds the TypeScript code.
+1. Runs the linter on the TypeScript code.
+1. Runs the TypeScript tests.
 
-You have 2 options for installing .NET Core & npm inside Jenkins:
-1. Make installation separate build stages
-    * This is not ideal as you will have to run the installation on each build
-2. [Specify containers to run stages of the Jenkins pipeline with .NET Core and npm pre-installed](https://www.jenkins.io/doc/book/pipeline/docker/)
-    * The simplest approach is to have one stage for your `npm` commands and a second stage for your `dotnet` commands, because each stage can have its own agent. You will have to specify `agent none` at the top of the pipeline.
-    * There are some pre-built images for npm (e.g. `node:17-bullseye`)
-    * Similarly for .NET you can use [Microsoft's image](https://hub.docker.com/_/microsoft-dotnet-sdk). You may need to set some environment variables in your Jenkinsfile for the dotnet CLI to work correctly: `DOTNET_CLI_HOME` (e.g. to `"/tmp/dotnet_cli_home"`) and `XDG_DATA_HOME` (e.g. to `"/tmp"`).
+It's up to you how exactly you do this, but consider:
+* Can you install the appropriate version of DotNet and Node using [the provided tasks](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/?view=azure-pipelines)
+* Do you want to use scripts or tasks for the other steps?
+* Check the [list of options](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-script?view=azure-pipelines) on the `script` task - are there any that we should set for any of your steps?
+* Do you need the C# & TypeScript steps to run on the same agent?
+  * Could we parallelise them?
+  * Should we?
 
-<details>
-<summary>Hints</summary>
-
-* You'll need to use a `dir` block for some steps to run them inside the `DotnetTemplate.Web` directory.
-* If Jenkins starts rate limiting your repository scanning you can go to "Manage Jenkins" -> "Configure System" and change "Github API usage rate limiting strategy" to "Throttle at/near rate limit". Adding credentials to your pipeline configuration will also increase the limit.
-
-</details>
-
-#### Run the Jenkins job
-1. Commit and push your new Jenkinsfile.
-2. From your Jenkins dashboard select the job you created.
-3. Click "Scan Repository Now" (exact wording may vary). This will scan the repository for branches and run the job on any branch with a Jenkinsfile.
-4. Select your branch, which should appear under "Branches" once the scan is done.
-5. You should see a stage view of the build, showing each stage in the Jenkinsfile. If the stage succeeded it will be green, if it failed it will be red.
-6. Select the most recent build from the build history on the left.
-7. Click "Console Output" to view the full logs from the build.
-
-Once the repository scanning has picked up a branch you can build it again by clicking "Build Now" for that branch. You only need to scan the repository to check for new branches with Jenkinsfiles.
-
-### (Stretch goal) Code coverage
-We want high _test coverage_, meaningfully testing as much of the functionality of the application as possible. _Code coverage_ is a more naive metric - it simply checks which lines of code were executed during the test run. But higher code coverage is usually a good thing and it can still usefully flag which parts of the codebase are definitely untested. So let's include code coverage in our CI pipeline.
-
-First check it works manually. From the DotnetTemplate.Web folder, run the command `npm run test-with-coverage`. This runs the frontend tests and calculates code coverage at the same time.
-
-It produces two reports: one in HTML form that you can open in your browser (DotnetTemplate.Web/coverage/index.html) and one in XML that we will get Jenkins to parse.
-
-Try adding code coverage to Jenkins:
-
-1. Install the [Code Coverage API](https://plugins.jenkins.io/code-coverage-api/) plugin on Jenkins.
-2. Change your Jenkins pipeline to run the tests with code coverage.
-3. Add a step after running the tests to publish coverage. You can see a simple example of the command if you scroll down the Code Coverage API documentation, to the "pipeline example". You will want to use the "istanbulCoberturaAdapter", and the report to publish is "cobertura-coverage.xml" in the coverage folder.
-4. You should see a code coverage report appear on the build's page after it completes. Click through to see details.
-
-Now let's enforce high code coverage:
-
-1. Configure it to fail the build for code coverage below 90%. You may find it easiest to use the Jenkins [Snippet Generator](https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator).
-2. Push your change and watch the build go red!
-3. Edit the `DotnetTemplate.Web/Scripts/spec/exampleSpec.ts` file:
-  * Update the import statement: `import { functionOne, functionTwo } from '../home/example';`
-  * Invoke functionTwo on a new line in the test `functionTwo();`
-4. Push the change and observe the build go green again! You can also view the code coverage history.
+### Stretch
 
 ### (Stretch goal) Slack notifications
-Like for the GitHub Actions workflow, add slack notification to the Jenkins job. To make this work you will need to use the Slack app [Jenkins CI](https://slack.com/apps/A0F7VRFKN-jenkins-ci?next_id=0), make sure this has been installed in the slack workspace you're using.
 
-> Note that their documentation may be slightly out of date and not quite match the page you see in Jenkins.
+To make sure people are aware when there are issues with the build, it can be useful to send a notification at the end of the workflow.
 
-### (Stretch goal) Use a Single Build Agent for the Jenkins Pipeline
-Can you create a single container that can be used as the sole build agent for the entire multistage Jenkins pipeline? You might need to do this to run end to end tests for example.
+**If you haven't already, please create your own personal slack workspace for this part of the exercise. This is free and can be set up [here](https://slack.com/create).**
+
+Have a go at following [the Azure advice for integrating your pipeline with Slack](https://learn.microsoft.com/en-us/azure/devops/pipelines/integrations/slack?view=azure-devops).
+
+TODO: Check learners have permissions to connect these
+
+### (Stretch Goal) Publish an artifact
+
+TODO: Test
+
+Sometimes we want our pipelines to produce a file - maybe a binary executable for our deployment, or some reporting. Have a go at generating an output from your CI pipeline and publishing it.
+
+You may want to use the command below to generate the executable, and the [Publish Artifact task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-pipeline-artifact-v1?view=azure-pipelines):
+```sh
+# This will rely on both dotnet & npm being present on the agent 
+dotnet publish -c Release -o /dist
+```
