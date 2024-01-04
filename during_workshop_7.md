@@ -146,8 +146,6 @@ TODO: Check learners have permissions to connect these
 
 ### (Stretch Goal) Publish an artifact
 
-TODO: Test
-
 Sometimes we want our pipelines to produce a file - maybe a binary executable for our deployment, or some reporting. Have a go at generating an output from your CI pipeline and publishing it.
 
 You may want to use the command below to generate the executable, and the [Publish Artifact task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-pipeline-artifact-v1?view=azure-pipelines):
