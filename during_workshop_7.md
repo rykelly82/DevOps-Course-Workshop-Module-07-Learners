@@ -155,3 +155,7 @@ You may want to use the command below to generate the executable, and the [Publi
 # This will rely on both dotnet & npm being present on the agent 
 dotnet publish -c Release -o /dist
 ```
+
+### (Stretch Goal) View Code Testing Coverage
+
+TODO: Explore this
