@@ -156,6 +156,12 @@ You may want to use the command below to generate the executable, and the [Publi
 dotnet publish -c Release -o /dist
 ```
 
+Once the job is succeeding, you should be able to see a link to the artifact in the job output:
+
+![artifact link in job output](./img/artifact-result.png)
+
+Click the link & check something sensible has been stored.
+
 ### (Stretch Goal) View Code Testing Coverage
 
 TODO: Explore this
