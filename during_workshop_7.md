@@ -28,10 +28,8 @@ Azure DevOps does many different things, the key tabs on the left to start with 
 * **Pipelines**
   * The core of today's workshop, ADO offers an interface for managing pipeline jobs that can be used for a variety of tasks including Continuous Integration.
   * Pipelines can be set up using either the "Classic Interface" or a YAML file. We will encourage the use of the latter, to take advantage of codifying our pipelines
-  * TODO: Link some docs
 * **Repos**
   * ADO can be used as a standalone tool providing just pipelines or boards pointing at work being tracked separately, but is commonly also used to host the code itself in repositories (repos)
-  * TODO: Link some docs
 
 Take a couple of minutes to explore the different views available within your project, and familiarise yourself with the ADO interface.
 
@@ -60,8 +58,6 @@ First we want to clone the repo:
 * Make sure you've selected the correct repository first
 * Then select the `Clone` button to find the repo URL (just as with GitHub)
 * Clone that onto your machine as usual (e.g. `git clone <url> <folder name>`)
-
-TODO: PERMISSIONS!
 
 Open the repository in VS Code, and add a new file at the top level called `azure-pipelines.yml`.
 
@@ -98,10 +94,9 @@ Note that each step is defined as either a "script" or a "task".
 [A list of Microsoft provided tasks can be viewed here.](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/?view=azure-pipelines)
 
 Check you're working on the right branch and then commit & push this file.
+> You may want to rename the pipeline after creation to avoid confusing it with other people's pipelines!
 
 Moving to the Pipelines view in ADO, we can now register our pipeline.
-
-TODO: Check how this changes if one person creates & registers on branch A, then second person on branch B
 
 To create your pipeline:
 * Click "Create Pipeline"
@@ -134,16 +129,6 @@ It's up to you how exactly you do this, but consider:
 
 ### Stretch
 
-### (Stretch goal) Slack notifications
-
-To make sure people are aware when there are issues with the build, it can be useful to send a notification at the end of the workflow.
-
-**If you haven't already, please create your own personal slack workspace for this part of the exercise. This is free and can be set up [here](https://slack.com/create).**
-
-Have a go at following [the Azure advice for integrating your pipeline with Slack](https://learn.microsoft.com/en-us/azure/devops/pipelines/integrations/slack?view=azure-devops).
-
-TODO: Check learners have permissions to connect these
-
 ### (Stretch Goal) Publish an artifact
 
 Sometimes we want our pipelines to produce a file - maybe a binary executable for our deployment, or some reporting. Have a go at generating an output from your CI pipeline and publishing it.
@@ -160,6 +145,14 @@ Once the job is succeeding, you should be able to see a link to the artifact in 
 
 Click the link & check something sensible has been stored.
 
-### (Stretch Goal) View Code Testing Coverage
 
-TODO: Explore this
+### (Stretch goal) Slack notifications
+
+To make sure people are aware when there are issues with the build, it can be useful to send a notification at the end of the workflow.
+
+**If you haven't already, please create your own personal slack workspace for this part of the exercise. This is free and can be set up [here](https://slack.com/create).**
+
+Have a go at following [the Azure advice for integrating your pipeline with Slack](https://learn.microsoft.com/en-us/azure/devops/pipelines/integrations/slack?view=azure-devops).
+
+
+
