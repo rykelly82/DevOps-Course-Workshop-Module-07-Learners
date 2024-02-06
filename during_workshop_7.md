@@ -24,7 +24,7 @@ Azure DevOps does many different things, the key tabs on the left to start with 
 * **Boards**
   * Here ADO offers various structures of ticketing-boards, used for tracking work
   * It can be offer various powerful capabilities, such as managing "sprints", "backlogs" and generating analytics.
-  * If you're interested, [see Microsoft's guidance for more information](https://learn.microsoft.com/bs-latn-ba/azure/devops/boards/?view=azure-devops)
+  * If you're interested, [see Microsoft's guidance for more information](https://learn.microsoft.com/en-gb/azure/devops/boards/?view=azure-devops)
 * **Pipelines**
   * The core of today's workshop, ADO offers an interface for managing pipeline jobs that can be used for a variety of tasks including Continuous Integration.
   * Pipelines can be set up using either the "Classic Interface" or a YAML file. We will encourage the use of the latter, to take advantage of codifying our pipelines
@@ -46,9 +46,9 @@ Within your breakout room you will have access to the same project, so at this p
   * Where different people can work on different branches
 * A repository each
 
-If you are creating the first repository, you can click the "Import" button to import the existing GitHub repository.
+If you are creating the first repository in this project, you can click the "Import" button to import the existing GitHub repository.
 
-If someone has already created the first repository and you want to create another, then you can click on the repository list at the top (as per the image below) and click "Import Repository" to create a new one.
+If someone has already created the a repository in your ADO project and you want to create another, then you can click on the repository list at the top (as per the image below) and click "Import Repository" to create a new one.
 
 ![Create repo image](./img/ado-create-repo.png)
 
@@ -93,7 +93,7 @@ Note that each step is defined as either a "script" or a "task".
 
 **Scripts** specify a specific command to run, such as our `echo` command, or something more complex (including executing a script file!).
 
-**Tasks** refer to a predefined mdoule, typically built-in & provided by Microsoft. These can be useful for common requirements, such as installing a particular package, or interacting with the Azure platform.
+**Tasks** refer to a predefined module, typically built-in & provided by Microsoft. These can be useful for common requirements, such as installing a particular package, or interacting with the Azure platform.
 
 [A list of Microsoft provided tasks can be viewed here.](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/?view=azure-pipelines)
 
