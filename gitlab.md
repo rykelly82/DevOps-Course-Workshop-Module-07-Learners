@@ -1,7 +1,5 @@
 ## Part 1 (GitLab CI)
 
-> Using shared runners on GitLab.com, which we will do today, requires account validation with a credit/debit card.
-
 ### Step 1 - Get the code
 
 - Sign in to GitLab and create a new project/repository
@@ -35,8 +33,6 @@ Follow the instructions in the [Running Locally](./run_locally.md) section to tr
 4. On your repository page, navigate to the CI/CD tab.
 5. You should see a table of pipelines. This should have one entry with a name matching your latest commit message. Select this entry.
 6. You should see a page with a visual representation of your pipeline, you can click on a job to see the detailed console output.
-
-> If you haven't already, you will need to enter credit card details at this stage to enable use of the shared job runners. GitLab.com will show a notification if this is the case.
 
 See [the GitLab documentation](https://docs.gitlab.com/ee/ci/quick_start/) for more details on how to get set up GitLab CI/CD and <https://docs.gitlab.com/ee/ci/yaml/index.html> for more details on the syntax of the `gitlab-ci.yml` file.
 
