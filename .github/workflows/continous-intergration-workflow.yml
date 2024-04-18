@@ -27,6 +27,10 @@ jobs:
       working-directory: DotnetTemplate.Web   
       run: npm run lint # Command to build TypeScript code
 
+    - name: Run the TypeScript Test
+      working-directory: DotnetTemplate.Web   
+      run: npm t # Command to build TypeScript code
+
     - name: Send mail
       if: always()
       uses: dawidd6/action-send-mail@v3
