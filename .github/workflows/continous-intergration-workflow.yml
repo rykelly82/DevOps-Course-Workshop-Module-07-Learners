@@ -10,3 +10,7 @@ jobs:
 
     - name: Build the C# codebase (.Net) 
       run: dotnet build # Command to build codebase
+
+    - name: Building the TypeScript Code
+      working-directory: DotnetTemplate.Web   
+      run: npm run build # Command to build TypeScript code
