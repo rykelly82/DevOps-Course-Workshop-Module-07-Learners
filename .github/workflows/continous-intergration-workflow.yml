@@ -11,6 +11,12 @@ jobs:
     - name: Build the C# codebase (.Net) 
       run: dotnet build # Command to build codebase
 
+    - name: Build the C# codebase (.Net) 
+      working-directory: DotnetTemplate.Web.Tests
+      run: dotnet test # Command to test codebase
+
+
+
     - name: Building the TypeScript Code
       working-directory: DotnetTemplate.Web   
       run: npm run build # Command to build TypeScript code
