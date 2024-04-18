@@ -25,15 +25,6 @@ jobs:
       working-directory: DotnetTemplate.Web   
       run: npm run lint # Command to build TypeScript code
 
-
-    - name: Hello World
-      id: response
-      run: echo Hello, world! && exit 1 - make build failing
-
-    - name: Hello World1
-      id: response1
-      run: echo Hello, world!
-
     - name: Send mail
       if: always()
       uses: dawidd6/action-send-mail@v3
@@ -42,9 +33,9 @@ jobs:
         server_address: smtp.gmail.com
         server_port: 465
         # Optional (recommended): mail server username:
-        username: ${{secrets.MAIL_USERNAME}}
+        username: rykelly82@gmail.com
         # Optional (recommended) mail server password:
-        password: ${{secrets.MAIL_PASSWORD}}
+        password: thomas17
         # email subject
         subject: ${{ github.repository }} ${{ github.job }} is ${{ job.status }}
         # email body as text
