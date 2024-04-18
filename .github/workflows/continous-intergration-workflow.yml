@@ -11,12 +11,16 @@ jobs:
     - name: Build the C# codebase (.Net) 
       run: dotnet build # Command to build codebase
 
-    - name: Build the C# codebase (.Net) 
+    - name: Test the C# codebase (.Net) 
       working-directory: DotnetTemplate.Web.Tests
       run: dotnet test # Command to test codebase
 
 
-
+# Below needs to  be fixed - error #127
     - name: Building the TypeScript Code
       working-directory: DotnetTemplate.Web   
       run: npm run build # Command to build TypeScript code
+
+    - name: Run the linter on the TypeScript Code
+      working-directory: DotnetTemplate.Web   
+      run: npm run lint # Command to build TypeScript code
